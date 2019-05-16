@@ -6,8 +6,8 @@ pingu()
 	REP=$2
 	PRINT=$3
 	echo "Calculando tempo de conexao para $IP..."
-	httping $IP -c $REP > httping.txt
-	echo "Tempo $PRINT" `tail -n 1 httping.txt | awk '{print $4}' | cut -d"/" -f2`
+	httping $IP -c $REP > temp_httping.txt
+	echo "Tempo $PRINT" `tail -n 1 temp_httping.txt | awk '{print $4}' | cut -d"/" -f2`
 
 }
 
@@ -47,4 +47,4 @@ sleep 5
 pingu $IP $REP "medio com tcp syn flood:"
 echo "============================="
 
-rm httping.txt
+rm temp_httping.txt

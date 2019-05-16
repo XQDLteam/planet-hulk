@@ -27,7 +27,7 @@ echo ""
 
 echo "============================="
 echo "Ataque hulk iniciado"
-xterm -e "python hulk.py $IP" &
+xterm -e "python hulk/hulk.py $IP" &
 sleep 3
 pingu $IP $REP "medio com ataque hulk:"
 echo "============================="

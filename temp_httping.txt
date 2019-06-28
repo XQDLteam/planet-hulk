@@ -1,24 +1,6 @@
 PING guriensino.unipampa.edu.br:443 (/guri):
-connected to 200.132.146.45:443 (284 bytes), seq=0 time= 28,69 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=1 time= 31,88 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=2 time= 87,19 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=3 time= 92,76 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=4 time= 74,62 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=5 time=165,90 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=6 time= 61,49 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=7 time= 88,56 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=8 time= 64,27 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=9 time= 84,04 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=10 time= 24,02 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=11 time= 89,67 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=12 time= 53,24 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=13 time= 94,22 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=14 time= 92,30 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=15 time= 50,82 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=16 time= 22,49 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=17 time= 23,55 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=18 time= 67,08 ms 
-connected to 200.132.146.45:443 (284 bytes), seq=19 time= 22,34 ms 
+connected to 200.132.146.45:443 (284 bytes), seq=0 time= 23,75 ms 
+connected to 200.132.146.45:443 (284 bytes), seq=1 time= 27,37 ms 
 --- https://guriensino.unipampa.edu.br/guri ping statistics ---
-21 connects, 20 ok, 0,00% failed, time 21347ms
-round-trip min/avg/max = 22,3/66,0/165,9 ms
+2 connects, 2 ok, 0,00% failed, time 1070ms
+round-trip min/avg/max = 23,8/25,6/27,4 ms

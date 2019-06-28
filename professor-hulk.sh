@@ -1,4 +1,6 @@
 #!/bin/bash
+acum=0
+UM=1
 
 pingu()
 {
@@ -10,6 +12,9 @@ pingu()
 	echo "$PRINT " `tail -n 1 temp_httping.txt | awk '{print $4}' | cut -d"/" -f2`
 	media=$(tail -n 1 temp_httping.txt | awk '{print $4}' | cut -d "/" -f2)
 	media=${media%.*}
+	acum=0
+	temp=0
+	temp2=0
 
 	while read line
 	do
@@ -22,10 +27,11 @@ pingu()
 	       acum=$(($acum+$temp2)) #somatorio
 	    fi
 	done < "temp_httping.txt"
-	n=$(($REP-1))
-	variancia=$(($acum/$n)) #somatorio/(n-1)
-	echo "variancia= $variancia"
-	dpad=$(echo "sqrt ( $variancia )" | bc -l) ; echo $dpad
+	n=$(($REP-$UM))
+	variancia=`echo "scale=5;$acum/$n" | bc` #somatorio/(n-1)
+	echo "Variancia: $variancia"
+	dpad=`echo "scale=5;sqrt($variancia)" | bc` ; echo "Standard deviation: $dpad"
+	#`echo "scale=5;$SOMADOR_1/$REPETICOES" | bc`
 
 }
 

@@ -1,6 +1,4 @@
 #!/bin/bash
-acum=0
-UM=1
 
 pingu()
 {
@@ -27,12 +25,11 @@ pingu()
 	       acum=$(($acum+$temp2)) #somatorio
 	    fi
 	done < "temp_httping.txt"
-	n=$(($REP-$UM))
-	variancia=`echo "scale=5;$acum/$n" | bc` #somatorio/(n-1)
-	echo "Variancia: $variancia"
-	dpad=`echo "scale=5;sqrt($variancia)" | bc` ; echo "Standard deviation: $dpad"
-	#`echo "scale=5;$SOMADOR_1/$REPETICOES" | bc`
-
+	n=$(($REP-1))
+    #echo "$n"
+	variancia=$(($acum/$n))
+    echo "variancia: $variancia"
+    dpad=$(echo "sqrt ( $variancia )" | bc -l ) ; echo $dpad 
 }
 
 [ $1 ] && [ $2 ] || {

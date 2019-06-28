@@ -9,7 +9,9 @@ pingu()
 	httping $IP -c $REP > temp_httping.txt
 	echo "$PRINT " `tail -n 1 temp_httping.txt | awk '{print $4}' | cut -d"/" -f2`
 	media=$(tail -n 1 temp_httping.txt | awk '{print $4}' | cut -d "/" -f2)
-	media=${media%.*}
+	min=$(tail -n 1 temp_httping.txt | awk '{print $4}' | cut -d "/" -f1)
+    max=$(tail -n 1 temp_httping.txt | awk '{print $4}' | cut -d "/" -f3)
+    media=${media%.*}
 	acum=0
 	temp=0
 	temp2=0
@@ -27,9 +29,11 @@ pingu()
 	done < "temp_httping.txt"
 	n=$(($REP-1))
     #echo "$n"
+    echo "Minimo: $min"
+    echo "Maximo: $max"
 	variancia=$(($acum/$n))
     echo "variancia: $variancia"
-    dpad=$(echo "sqrt ( $variancia )" | bc -l ) ; echo $dpad 
+    dpad=$(echo "sqrt ( $variancia )" | bc -l ) ; echo "Desvio Padrao: $dpad" 
 }
 
 [ $1 ] && [ $2 ] || {

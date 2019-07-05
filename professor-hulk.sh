@@ -11,44 +11,29 @@ pingu()
 	media=$(tail -n 1 "temp_httping-$PRINT.txt" | awk '{print $4}' | cut -d "/" -f2)
 	min=$(tail -n 1 "temp_httping-$PRINT.txt" | awk '{print $4}' | cut -d "/" -f1)
     max=$(tail -n 1 "temp_httping-$PRINT.txt" | awk '{print $4}' | cut -d "/" -f3)
-    media=${media%.*}
+    media=${media}
 	acum=0
 	temp=0
 	temp2=0
+    
+    data=$(grep -w connected "temp_httping-$PRINT.txt" | sed 's/^.*=\s*\(.*\) ms /\1/' )
 
-	while read line
-	do
-        NUM=$(echo "$line" | awk '{print gsub("[ ]",""); exit}')
-        if [[ $NUM == 8 ]];
-        then
-	        if [[ $line == connected* ]];
-	        then
-                data=$(echo "$line" | awk '{print $8}' | cut -d"=" -f2)
-                data=${data%.*}
-                echo "$data," >> "test-$PRINT.txt"
-	            temp=$(($data-$media)) #xi - media
-	            temp2=$(($temp*$temp)) #(xi-media)^2
-	            acum=$(($acum+$temp2)) #somatorio
-	        fi
-        else
-	        if [[ $line == connected* ]];
-	        then 
-                #data=$(echo "$line" | awk -v var=$NUM 'BEGIN {print var}' | cut -d"=" -f2)
-                data=$(echo "$line" | awk '{print $7}' | cut -d"=" -f2)
-                data=${data%.*}
-                echo "$data," >> "test-$PRINT.txt"
-	            temp=$(($data-$media)) #xi - media
-	            temp2=$(($temp*$temp)) #(xi-media)^2
-	            acum=$(($acum+$temp2)) #somatorio
-	        fi
-        fi
+    for valor in $data
+    do
+        #echo "valor: $valor" 
+        #temp=$(($valor-$media))
+        temp=$(echo "scale=2; $valor-$media" | bc -l)
+        temp2=$(echo "scale=2; $temp*$temp" | bc -l)
+        acum=$(echo "scale=2; $acum+$temp2" | bc -l)
 	done < "temp_httping-$PRINT.txt"
-	n=$(($REP-1))
+	
+    n=$(($REP-1))
     echo "$PRINT"
     echo "Minimo: $min"
     echo "Media: $media"
     echo "Maximo: $max"
-	variancia=$(($acum/$n))
+	
+    variancia=$(echo "scale=2; $acum/$n" | bc -l)
     echo "variancia: $variancia"
     dpad=$(echo "sqrt ( $variancia )" | bc -l ) ; echo "Desvio Padrao: $dpad" 
 }

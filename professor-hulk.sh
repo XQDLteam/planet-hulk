@@ -6,11 +6,11 @@ pingu()
 	REP=$2
 	PRINT=$3
 	echo "Calculating time to $IP... "
-	httping $IP -c $REP > temp_httping.txt
+	httping $IP -c $REP > "temp_httping-$PRINT.txt"
 	#echo "$PRINT " `tail -n 1 temp_httping.txt | awk '{print $4}' | cut -d"/" -f2`
-	media=$(tail -n 1 temp_httping.txt | awk '{print $4}' | cut -d "/" -f2)
-	min=$(tail -n 1 temp_httping.txt | awk '{print $4}' | cut -d "/" -f1)
-    max=$(tail -n 1 temp_httping.txt | awk '{print $4}' | cut -d "/" -f3)
+	media=$(tail -n 1 "temp_httping-$PRINT.txt" | awk '{print $4}' | cut -d "/" -f2)
+	min=$(tail -n 1 "temp_httping-$PRINT.txt" | awk '{print $4}' | cut -d "/" -f1)
+    max=$(tail -n 1 "temp_httping-$PRINT.txt" | awk '{print $4}' | cut -d "/" -f3)
     media=${media%.*}
 	acum=0
 	temp=0
@@ -18,15 +18,31 @@ pingu()
 
 	while read line
 	do
-	    if [[ $line == connected* ]];
-	    then
-	       data=$(echo "$line" | awk '{print $7}' | cut -d"=" -f2)
-	       data=${data%.*}
-	       temp=$(($data-$media)) #xi - media
-	       temp2=$(($temp*$temp)) #(xi-media)^2
-	       acum=$(($acum+$temp2)) #somatorio
-	    fi
-	done < "temp_httping.txt"
+        NUM=$(echo "$line" | awk '{print gsub("[ ]",""); exit}')
+        if [[ $NUM == 8 ]];
+        then
+	        if [[ $line == connected* ]];
+	        then
+                data=$(echo "$line" | awk '{print $8}' | cut -d"=" -f2)
+                data=${data%.*}
+                echo "$data," >> "test-$PRINT.txt"
+	            temp=$(($data-$media)) #xi - media
+	            temp2=$(($temp*$temp)) #(xi-media)^2
+	            acum=$(($acum+$temp2)) #somatorio
+	        fi
+        else
+	        if [[ $line == connected* ]];
+	        then 
+                #data=$(echo "$line" | awk -v var=$NUM 'BEGIN {print var}' | cut -d"=" -f2)
+                data=$(echo "$line" | awk '{print $7}' | cut -d"=" -f2)
+                data=${data%.*}
+                echo "$data," >> "test-$PRINT.txt"
+	            temp=$(($data-$media)) #xi - media
+	            temp2=$(($temp*$temp)) #(xi-media)^2
+	            acum=$(($acum+$temp2)) #somatorio
+	        fi
+        fi
+	done < "temp_httping-$PRINT.txt"
 	n=$(($REP-1))
     echo "$PRINT"
     echo "Minimo: $min"
@@ -86,4 +102,4 @@ bash hulk-buster.sh
 
 
 
-rm temp_httping.txt
+#rm temp_httping.txt

